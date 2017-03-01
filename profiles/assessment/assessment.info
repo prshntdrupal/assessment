@@ -1,0 +1,45 @@
+name = Assessment
+description = Install with commonly used features pre-configured for the assessment
+version = "7.x-1.0"
+core = 7.x
+
+;standard modules
+dependencies[] = block
+dependencies[] = color
+dependencies[] = comment
+dependencies[] = contextual
+dependencies[] = dashboard
+dependencies[] = help
+dependencies[] = image
+dependencies[] = list
+dependencies[] = menu
+dependencies[] = number
+dependencies[] = options
+dependencies[] = path
+dependencies[] = taxonomy
+dependencies[] = dblog
+dependencies[] = search
+dependencies[] = shortcut
+dependencies[] = toolbar
+dependencies[] = overlay
+dependencies[] = field_ui
+dependencies[] = file
+dependencies[] = rdf
+
+;contrib modules
+dependencies[] = addressfield
+dependencies[] = context
+dependencies[] = date
+dependencies[] = text
+dependencies[] = views
+dependencies[] = entity
+dependencies[] = uuid
+dependencies[] = admin_menu
+dependencies[] = uuid_features
+
+;feature module
+dependencies[] = features
+
+;custom module
+dependencies[] = event_content
+dependencies[] = sample_data

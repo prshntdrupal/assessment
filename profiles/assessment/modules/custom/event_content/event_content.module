@@ -1,0 +1,60 @@
+<?php
+/**
+ * @file
+ * Code for the content_event feature.
+ */
+
+include_once 'event_content.features.inc';
+
+/**
+ * Implements hook_form_FORM_ID_alter() for the node form.
+ */
+function event_content_form_event_node_form_alter(&$form, &$form_state, $form_id) {
+//    drupal_add_css(drupal_get_path('module', 'custom') . '/custom.css', array('group' => CSS_DEFAULT, 'every_page' => TRUE));
+//    I used css to see if it hides title or not but didn't worked out. So disabled the field.
+    $form['title']['#suffix'] = t('Title field is dynamically generated so its disabled');
+    $form['title']['#required'] = FALSE;
+    $form['title']['#disabled'] = TRUE;
+    $form['field_event_date']['#datepicker_options']['minDate'] = 0;
+
+//    print "<pre>";
+//     print_r();
+//     die();
+}
+
+/**
+ * Implements hook_node_submit().
+ *
+ * Generate the node title as soon as the form has been submitted. That way
+ * the node preview is shown right too.
+ */
+function event_content_node_submit($node, $form, &$form_state) {
+    if (($node->type ==  'event') && (!isset($node->nid)))
+        $node->title = $node->field_event_name['und']['0']['value'] . " - " .
+            format_date($node->field_event_date['und']['0']['value'], 'custom', 'l') .
+            " " .
+            $node->field_event_location['und']['0']['locality'];
+    elseif (($node->type ==  'event') && (
+            !($form['#node']->field_event_name['und']['0']['value'] == $node->field_event_name['und']['0']['value']) ||
+            !($form['#node']->field_event_date['und']['0']['value'] == $node->field_event_date['und']['0']['value']) ||
+            !($form['#node']->field_event_location['und']['0']['locality'] == $node->field_event_location['und']['0']['locality'])
+        ))
+        $node->title = $node->field_event_name['und']['0']['value'] . " - " .
+            format_date($node->field_event_date['und']['0']['value'], 'custom', 'l') .
+            " " .
+            $node->field_event_location['und']['0']['locality'];
+}
+
+/**
+ * Implementation of hook_views_query_alter
+ * @param type $view
+ * @param type $query
+ * This function has been used to make the custom date field to work and filter properly as the relative words like "now"
+ * are not working on custom date fields
+ */
+function event_content_views_query_alter(&$view, &$query) {
+    if ($view->name == 'upcoming_event') {
+        $query->where[1]['conditions'][2]['value'] = REQUEST_TIME;
+
+    }
+}
